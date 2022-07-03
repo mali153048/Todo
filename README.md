@@ -1,5 +1,5 @@
 # Note
-The application fulfills all the listed requirements in the document. Besides that i have also added an additional feature that is Userr Login & Register 
+The application fulfills all the listed requirements in the document. Besides that i have also added an additional feature that is User Login & Register 
 so each user can view their own Todo's and Tasks  
 
 # Tech Stack
