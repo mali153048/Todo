@@ -1,0 +1,192 @@
+﻿@model IEnumerable<ToDo.Application.DTO.TodoDTO>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            @{
+                if (TempData["NewtodoSuccessStatus"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span>@(TempData["NewtodoSuccessStatus"] as string)</span>
+                        <br />
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+                else if (TempData["NewtodoErrorStatus"] != null)
+                {
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <span>@(TempData["NewtodoErrorStatus"] as string)</span>
+                        <br />
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+            }
+            <p>
+                <a asp-action="Create" data-bs-toggle="modal" data-bs-target="#exampleModal">Create New</a>
+            </p>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreatedAt)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="@item.ID">
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreatedAt)
+                            </td>
+                            <td>
+                                <button onclick="onEdit(@item.ID)" type="button" class="btn btn-primary">
+                                    <i class="bi bi-pencil-square"></i>Edit
+                                </button>
+                                <button onclick="onDetails(@item.ID)" type="button" class="btn btn-success">
+                                    <i class="bi bi-card-list"></i>Details
+                                </button>
+                                <button onclick="onDelete(@item.ID,'todo')" type="button" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i> Remove
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add TODO</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newtodo-form" asp-action="UpsertTodo" asp-controller="home" method="post">
+                        <div class="form-group">
+                            <label class="control-label">Title</label>
+                            <input id="todo-title" type="text" name="title" class="form-control" />
+                            <input id="todo-id" type="hidden" name="id" class="form-control" />
+                            <span id="err-msg-title" class="visually-hidden text-danger">Title is required.</span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="btn-add-todo" type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="todo-title-heading"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            ID<br />
+                            Created At<br />
+                            Modified At
+                        </div>
+                        <div class="col-md-6">
+                            <span id="todo-idd"></span><br />
+                            <span id="todo-cat"></span><br />
+                            <span id="todo-mat"></span>
+                        </div>
+                    </div>
+                    <hr />
+                    <form id="frm-task" asp-action="addTask" asp-controller="home" method="post" class="visually-hidden">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input id="txt-task" type="text" class="form-control" name="title" />
+                                <input id="parent-task-id" name="parentID" type="hidden" value="" />
+                                <span id="err-msg-task-title" class="visually-hidden text-danger">Task name is required.</span>
+                            </div>
+                            <div class="col-md-6">
+                                <button id="btn-add-task" class="btn btn-primary" type="button">Add Task</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="row task-details">
+                        <div class="col-md-4">
+                            ID<br />
+                            Task<br />
+                            Created At<br />
+                            Modified At
+                        </div>
+                        <div class="col-md-4">
+                            <span id="task-id"></span><br />
+                            <span id="task-title-name"></span><br />
+                            <span id="task-cat"></span><br />
+                            <span id="task-mat"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <button id="btn-edit-task" type="button" class="btn btn-primary">
+                                <i class="bi bi-pencil-square"></i>
+                            </button>
+                            <button id="btn-del-task" type="button" class="btn btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <form id="frm-edit-task" asp-action="upsertTodo" asp-controller="home" method="post" class="visually-hidden">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Edit Task</label>
+                                <input id="edit-task-title" type="text" name="title" class="form-control" />
+                                <span id="err-msg-edit" class="visually-hidden text-danger">Task name is required.</span>
+
+                                <input id="edit-task-id" type="text" name="id" class="visually-hidden" />
+                                <input id="edit-task-parentid" type="text" name="parentID" class="visually-hidden" />
+                            </div>
+                            <div class="col-md-6">
+                                <button id="btn-edit-save" type="button" class="btn btn-primary">Save</button>
+                                <button id="btn-cancel-edit" type="button" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+
+@section Scripts
+    {
+    <script src="/Views/Home/Index.cshtml.js"></script>
+}

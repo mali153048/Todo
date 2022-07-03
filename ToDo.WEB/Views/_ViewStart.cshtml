@@ -1,0 +1,6 @@
+﻿@{
+    if (User != null && User.Identity != null && User.Identity.IsAuthenticated)
+        Layout = "_UserLayout";
+    else
+        Layout = "_AuthLayout";
+}

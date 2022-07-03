@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="SQLQueries\Auth\RegisterUser.sql" />
+    <None Remove="SQLQueries\Auth\UsernameExists.sql" />
+    <None Remove="SQLQueries\Todo\DeleteTodo.sql" />
+    <None Remove="SQLQueries\Todo\GetAllByUserID.sql" />
+    <None Remove="SQLQueries\Todo\GetTodo.sql" />
+    <None Remove="SQLQueries\Todo\NewTodo.sql" />
+    <None Remove="SQLQueries\Todo\TodoDetails.sql" />
+    <None Remove="SQLQueries\Todo\UpdateTodo.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="SQLQueries\Auth\RegisterUser.sql" />
+    <EmbeddedResource Include="SQLQueries\Todo\DeleteTodo.sql" />
+    <EmbeddedResource Include="SQLQueries\Todo\TodoDetails.sql" />
+    <EmbeddedResource Include="SQLQueries\Todo\UpdateTodo.sql" />
+    <EmbeddedResource Include="SQLQueries\Todo\GetTodo.sql" />
+    <EmbeddedResource Include="SQLQueries\Todo\NewTodo.sql" />
+    <EmbeddedResource Include="SQLQueries\Todo\GetAllByUserID.sql" />
+    <EmbeddedResource Include="SQLQueries\User\GetUserByUsername.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ToDo.Application\ToDo.Application.csproj" />
+  </ItemGroup>
+
+</Project>
