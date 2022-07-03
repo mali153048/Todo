@@ -1,3 +1,7 @@
+# Note
+The application fulfills all the listed requirements in the document. Besides that i have also added an additional feature that is Userr Login & Register 
+so each user can view their own Todo's and Tasks  
+
 # Tech Stack
 => .NET 6 (MVC pattern with .NET 6 class libraries)  
 => Razor Pages (JQuery, HTML, Bootstrap 5)  
